@@ -26,6 +26,13 @@ This means that any developer building an Eliza agent — whether for trading bo
 
 ---
 
+## **Agent in Action**
+
+![Memevelli Group Chat](./docs/images/group_chat_interface.png)
+*Edd, Ed, and Eddy coordinating a cross-chain trade in the Memevelli group interface.*
+
+---
+
 ## **Objective**
 
 The goal of Memevelli is to provide a working template for an AI agent that uses **LI.FI** to execute real on-chain strategies. Memevelli doesn't just call a swap endpoint; it actively uses LI.FI as part of its autonomous execution loop to:
@@ -50,6 +57,9 @@ Enables the agent to purchase meme tokens on any target chain using its current 
 
 ### 📊 **LIFI_CHECK_BALANCE**
 Provides the agent with real-time visibility into its multichain holdings, allowing it to make informed allocations.
+
+![Multichain Balances](./docs/images/multichain_balances.png)
+*Real-time balance tracking across Arbitrum, Base, and Ethereum.*
 
 ---
 
@@ -97,6 +107,10 @@ The following transactions demonstrate Memevelli agents executing real on-chain 
 | 🌉 **Bridge** | USDC bridge Arbitrum → Base | *(coming soon)* | *(coming soon)* |
 
 > All transactions are executed by autonomous agents using the `@elizaos/plugin-lifi` plugin. No manual intervention required.
+
+### **Detailed Execution Example**
+![LI.FI Execute Sell](./docs/images/lifi_execute_sell.png)
+*Example of a successful on-chain sell order executed autonomously on Base.*
 
 ---
 

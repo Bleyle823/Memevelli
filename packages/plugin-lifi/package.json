@@ -1,0 +1,77 @@
+{
+    "name": "@elizaos/plugin-lifi",
+    "description": "LI.FI cross-chain swap and bridge plugin for ElizaOS — powers NarrativeTrader cross-chain meme coin trades",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "dist/index.js",
+    "module": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "packageType": "plugin",
+    "platform": "node",
+    "license": "MIT",
+    "keywords": [
+        "plugin",
+        "elizaos",
+        "lifi",
+        "defi",
+        "cross-chain",
+        "swap",
+        "bridge"
+    ],
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "import": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            }
+        }
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "package.json"
+    ],
+    "dependencies": {
+        "@elizaos/core": "workspace:*",
+        "@lifi/sdk": "^3.4.0",
+        "viem": "^2.21.0",
+        "zod": "^4.3.5"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.3",
+        "dotenv": "^17.2.3"
+    },
+    "scripts": {
+        "build": "bun run build.ts",
+        "dev": "elizaos dev",
+        "start": "elizaos start",
+        "lint": "prettier --write ./src",
+        "build:watch": "bun run build.ts --watch"
+    },
+    "agentConfig": {
+        "pluginType": "elizaos:plugin:1.0.0",
+        "pluginParameters": {
+            "LIFI_API_KEY": {
+                "type": "string",
+                "description": "LI.FI API key for higher rate limits (optional but recommended)"
+            },
+            "WALLET_PRIVATE_KEY": {
+                "type": "string",
+                "description": "Private key of the agent's burner wallet for executing trades"
+            },
+            "WALLET_ADDRESS": {
+                "type": "string",
+                "description": "Public address of the agent's wallet"
+            },
+            "APIFY_TOKEN": {
+                "type": "string",
+                "description": "Apify token for Twitter/X sentiment scraping (optional — uses mock if absent)"
+            },
+            "NT_DEMO_MODE": {
+                "type": "string",
+                "description": "Set to 'true' to run pre-scripted demo events instead of live trading"
+            }
+        }
+    }
+}

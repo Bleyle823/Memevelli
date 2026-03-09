@@ -53,6 +53,8 @@ Get your first AI agent running in just a few commands.
 
 ### 1. Install the CLI
 
+bun run ./packages/cli/dist/index.js start --character characters/alpha.json characters/beta.json characters/gamma.json
+```
 ```bash
 # Install the ElizaOS CLI globally
 bun install -g @elizaos/cli

@@ -99,8 +99,9 @@ export const SCORE_SELL_DEFAULT = 0.40;
 export const MIN_UNIQUE_AUTHORS = 50;
 
 // Risk defaults
-export const DEFAULT_POSITION_SIZE_USD = 1.5;   // ~$1.5 per trade (3 positions = $4.5 max)
-export const MAX_POSITIONS = 3;
+export const DEFAULT_POSITION_SIZE_USD = 0.5;  // $0.50 per trade — low enough for many txs, above DEX minimums
+export const MIN_POSITION_SIZE_USD = 0;         // No minimum — accept any positive amount
+export const MAX_POSITIONS = 5;
 export const MAX_EXPOSURE_USD = 100;
 export const STOP_LOSS_PCT = 0.15;  // exit at -15%
 export const TAKE_PROFIT_PCT = 0.40;  // exit at +40%

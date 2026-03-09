@@ -189,3 +189,11 @@ standalone.ts
 # Continuous Claude cache (local only)
 .claude/cache/
 /thoughts
+
+# Memevelli local exclusions
+test-db/
+test-output.txt
+check-out.txt
+scripts/update_characters.cjs
+.cursor/
+.cursorrules

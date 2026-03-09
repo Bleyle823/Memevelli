@@ -12,10 +12,9 @@ import { randomUUID } from 'node:crypto';
 
 export const executeBridgeAction: Action = {
     name: 'LIFI_EXECUTE_BRIDGE',
-    similes: ['BRIDGE_TOKEN', 'TRANSFER_CHAIN', 'CROSS_CHAIN_TRANSFER'],
+    similes: ['BRIDGE_TOKEN', 'TRANSFER_CHAIN', 'CROSS_CHAIN_TRANSFER', 'MOVE_FUNDS'],
     description:
-        'Bridges tokens (like USDC) from one chain to another via LI.FI SDK. ' +
-        'Example: "Bridge 0.5 usdc from base to arbitrum"',
+        'Bridges tokens (like USDC) from one chain to another via LI.FI SDK. Use when a user asks to move funds across chains or when the agent strategy requires rebalancing funds.',
 
     validate: async (runtime: IAgentRuntime, _message: Memory): Promise<boolean> => {
         const service = runtime.getService<LiFiService>(LiFiService.serviceType as any);
@@ -32,8 +31,23 @@ export const executeBridgeAction: Action = {
         const service = runtime.getService<LiFiService>(LiFiService.serviceType as any);
         if (!service) return { success: false, error: new Error('LiFiService not available') };
 
-        const text = message.content.text || '';
-        const bridgeParams = extractBridgeParams(text);
+        const agentId = runtime.agentId;
+        const agentName = runtime.character?.name ?? agentId;
+
+        const incomingText = message.content.text || '';
+        let bridgeParams = extractBridgeParams(incomingText);
+
+        // Fallback: Check state if parameters are missing from incoming message
+        if (!bridgeParams.amount && _state) {
+            const recent = _state.recentMessagesData as any[];
+            if (recent && recent.length > 0) {
+                const latest = recent[0];
+                if (latest?.entityId === agentId) {
+                    const fallbackParams = extractBridgeParams(latest.content?.text ?? '');
+                    bridgeParams = { ...bridgeParams, ...fallbackParams };
+                }
+            }
+        }
 
         const amountStr = options.amount || bridgeParams.amount;
         const tokenStr = options.token || bridgeParams.token;

@@ -15,10 +15,9 @@ import { randomUUID } from 'node:crypto';
 
 export const executeBuyAction: Action = {
     name: 'LIFI_EXECUTE_BUY',
-    similes: ['BUY_TOKEN', 'SWAP_INTO', 'ENTER_POSITION', 'NARRATIVE_BUY'],
+    similes: ['BUY_TOKEN', 'SWAP_INTO', 'ENTER_POSITION', 'NARRATIVE_BUY', 'PURCHASE_COIN'],
     description:
-        'Executes a cross-chain token buy via LI.FI SDK. Performs full quote → route → execute flow, ' +
-        'then records the position. Use when narrative score triggers a BUY signal.',
+        'Executes a cross-chain token buy via LI.FI SDK. Use when a user explicitly asks to buy a token (e.g., "buy 0.5 USDC worth of BRETT on Base") or when the agent narrative indicates a buying opportunity.',
 
     validate: async (runtime: IAgentRuntime, _message: Memory): Promise<boolean> => {
         const service = runtime.getService<LiFiService>(LiFiService.serviceType);
@@ -35,12 +34,26 @@ export const executeBuyAction: Action = {
         const service = runtime.getService<LiFiService>(LiFiService.serviceType as any);
         if (!service) return { success: false, error: 'LiFiService not available' as any };
 
-        const ticker = options.ticker ?? extractTicker(message.content.text ?? '');
-        const amountUSD = options.amountUSD ?? DEFAULT_POSITION_SIZE_USD;
-        const score = options.score ?? 0;
-        const reason = options.reason ?? 'Narrative BUY signal';
         const agentId = runtime.agentId;
         const agentName = runtime.character?.name ?? agentId;
+
+        // Extraction logic: try options, then message, then the agent's own recently generated response (in state)
+        let ticker = options.ticker ?? extractTicker(message.content.text ?? '');
+        if (!ticker && _state) {
+            // In Eliza, the response text is often added to state before actions are processed
+            // or we can look at the latest message in recentMessagesData if it's from the agent
+            const recent = _state.recentMessagesData as any[];
+            if (recent && recent.length > 0) {
+                const latest = recent[0];
+                if (latest?.entityId === agentId) {
+                    ticker = extractTicker(latest.content?.text ?? '');
+                }
+            }
+        }
+
+        const amountUSD = options.amountUSD ?? (runtime.character as any).settings?.groupBehavior?.tradeSizeUSD ?? (runtime.character as any).settings?.positionSizeUSD ?? DEFAULT_POSITION_SIZE_USD;
+        const score = options.score ?? 0;
+        const reason = options.reason ?? 'Narrative BUY signal';
 
         if (!ticker || !MEME_COINS[ticker]) {
             return { success: false, error: `Unknown ticker: ${ticker}` as any };

@@ -333,22 +333,23 @@ export class LiFiService extends Service {
         const agentName = this.runtime.character?.name ?? agentId;
 
         const demoScenarios: Array<{ delay: number; type: string; ticker: string; reason: string; pnlUSD?: number }> = {
-            alpha: [
-                { delay: 6000, type: 'BUY', ticker: 'BRETT', reason: 'velocity 2.1x avg, 890 unique accounts, 82% bullish — entering on BASE' },
-                { delay: 25000, type: 'BUY', ticker: 'WIF', reason: 'WIF momentum surging on Arbitrum, score 0.78' },
-                { delay: 55000, type: 'SELL', ticker: 'BRETT', reason: 'Take-profit hit +40%! $13.20 realized', pnlUSD: 13.2 },
-                { delay: 80000, type: 'SELL', ticker: 'WIF', reason: 'Score dropped to 0.38, narrative cooling', pnlUSD: -3.5 },
+            edd: [
+                { delay: 6000, type: 'BUY', ticker: 'BRETT', reason: '🔥 CT ALERT: $BRETT trending — 847 unique accounts, 84% bullish, score 0.81. Edd buying on BASE.' },
+                { delay: 25000, type: 'BUY', ticker: 'WIF', reason: '📊 $WIF narrative velocity 2.1x avg, 712 unique authors, score 0.78. Entering.' },
+                { delay: 55000, type: 'SELL', ticker: 'BRETT', reason: 'Take-profit hit +40%! $13.20 realized. Data confirmed exit point.', pnlUSD: 13.2 },
+                { delay: 80000, type: 'SELL', ticker: 'WIF', reason: 'Score dropped to 0.38 — narrative cooling. Exiting.', pnlUSD: -3.5 },
             ],
-            beta: [
-                { delay: 10000, type: 'SKIP', ticker: 'BRETT', reason: 'Score 0.74 below my 0.82 threshold — waiting for confirmation' },
-                { delay: 35000, type: 'BUY', ticker: 'WIF', reason: 'Score 0.89 confirmed — measured entry on Arbitrum' },
-                { delay: 70000, type: 'SELL', ticker: 'WIF', reason: 'Stop-loss at -12% — cut the loss', pnlUSD: -3.96 },
+            ed: [
+                { delay: 8000, type: 'BUY', ticker: 'BRETT', reason: 'WOAH! Edd said $BRETT score is 0.81!! BUYING NOW!! THIS IS GREAT!!' },
+                { delay: 28000, type: 'BUY', ticker: 'BONK', reason: 'OH MAN! $BONK is trending! 800 tweets! WE GOTTA BUY!!' },
+                { delay: 58000, type: 'SELL', ticker: 'BRETT', reason: 'Eddy said sell... okay fine. Goodbye BRETT :(', pnlUSD: 11.5 },
+                { delay: 83000, type: 'SELL', ticker: 'BONK', reason: 'Okay selling $BONK now like Edd said... next time!!', pnlUSD: -2.8 },
             ],
-            gamma: [
-                { delay: 8000, type: 'BUY', ticker: 'PEPE', reason: 'Contrarian: crowd is fearful on PEPE (score 0.45), buying the dip on ETH' },
-                { delay: 30000, type: 'BUY', ticker: 'BRETT', reason: 'Crowd celebrating $BRETT — contrarian says buy the FOMO' },
-                { delay: 62000, type: 'SELL', ticker: 'PEPE', reason: 'Crowd started buying PEPE — time to exit +28%', pnlUSD: 9.24 },
-                { delay: 85000, type: 'SELL', ticker: 'BRETT', reason: 'Everyone bullish now — contrarian exit', pnlUSD: 5.6 },
+            eddy: [
+                { delay: 4000, type: 'BUY', ticker: 'PEPE', reason: '👀 Contrarian: crowd fearful on $PEPE (43% positive). Classic buy signal. Executing before the reversal. Trust me.' },
+                { delay: 20000, type: 'BUY', ticker: 'BRETT', reason: '🐋 @CryptoWhale500k just posted on $BRETT. 847 retweets. Front-running the narrative.' },
+                { delay: 52000, type: 'SELL', ticker: 'PEPE', reason: 'Crowd turned bullish on $PEPE — that\'s my exit signal. Sold at +28%. As planned.', pnlUSD: 9.24 },
+                { delay: 78000, type: 'SELL', ticker: 'BRETT', reason: 'Everyone bullish now. Contrarian says: out. +22% realized.', pnlUSD: 7.6 },
             ],
         }[(this.runtime.character?.name ?? '').toLowerCase()] ?? [];
 

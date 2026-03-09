@@ -13,10 +13,9 @@ import { randomUUID } from 'node:crypto';
 
 export const executeSellAction: Action = {
     name: 'LIFI_EXECUTE_SELL',
-    similes: ['SELL_TOKEN', 'EXIT_POSITION', 'CLOSE_TRADE', 'NARRATIVE_SELL'],
+    similes: ['SELL_TOKEN', 'EXIT_POSITION', 'CLOSE_TRADE', 'NARRATIVE_SELL', 'DUMP_COIN'],
     description:
-        'Executes a cross-chain token sell via LI.FI SDK, closing an open position. ' +
-        'Use when narrative score drops below threshold, stop-loss triggers, or take-profit is hit.',
+        'Executes a cross-chain token sell via LI.FI SDK. Use when a user explicitly asks to sell a token (e.g., "sell BRETT on Base") or when the agent strategy indicates a selling opportunity.',
 
     validate: async (runtime: IAgentRuntime, _message: Memory): Promise<boolean> => {
         const service = runtime.getService<LiFiService>(LiFiService.serviceType);
@@ -33,10 +32,21 @@ export const executeSellAction: Action = {
         const service = runtime.getService<LiFiService>(LiFiService.serviceType);
         if (!service) return { success: false, error: new Error('LiFiService not available') };
 
-        let ticker = options.ticker ?? extractTicker(message.content.text ?? '');
-        const reason = options.reason ?? 'Narrative SELL signal';
         const agentId = runtime.agentId;
         const agentName = runtime.character?.name ?? agentId;
+
+        let ticker = options.ticker ?? extractTicker(message.content.text ?? '');
+        if (!ticker && _state) {
+            const recent = _state.recentMessagesData as any[];
+            if (recent && recent.length > 0) {
+                const latest = recent[0];
+                if (latest?.entityId === agentId) {
+                    ticker = extractTicker(latest.content?.text ?? '');
+                }
+            }
+        }
+
+        const reason = options.reason ?? 'Narrative SELL signal';
 
         // Fallback: If ticker missing, check if agent has exactly one open position
         if (!ticker) {
